@@ -1,30 +1,23 @@
 import React, {useState} from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {Text, TextInput, View, StyleSheet, Alert} from 'react-native'
 import { Button, CheckBox, } from 'react-native-elements';
 import { AddTodo } from '../redux/actionCreators'
 
 const NewTaskTodo = ({ navigation }) => {
+  const stateCheck = useSelector(state => state)
   const dispatch = useDispatch()
   const [isChecked, setIsChecked] = useState(false);
   const [title, setTitle] = useState('')
   const [body, setBody] = useState('')
-  const [disable, setDisable] = useState(true)
-  const newTodo = {
-    title:'' ,
-    body: '',
-    urgent: isChecked,
-    completed: false,
-  }
-  
+
    const addTodo = () => {
      if (title && body) {
-       newTodo.title = title
-       newTodo.body = body
-      dispatch(AddTodo(newTodo));
+       const newId = stateCheck.todos.todos.length +1
+       dispatch(AddTodo(newId, title, body, isChecked));
        setBody('');
        setTitle('')
-       navigation.navigate('HomeScreen')
+      return navigation.navigate('Home')
     } else {
       Alert.alert('please add a title and body');
     }
@@ -35,8 +28,8 @@ const NewTaskTodo = ({ navigation }) => {
       <View styles={styles.titleContainer}>
         <Text style={styles.title}>Add a Task</Text>
       </View>
-      <View styles={styles.titleInput}>
-        <Text>Title</Text>
+      <View style={styles.titleInput}>
+        <Text style={styles.title}>Title</Text>
         <TextInput
           style={styles.mainInput}
           onChangeText={setTitle}
@@ -44,8 +37,8 @@ const NewTaskTodo = ({ navigation }) => {
           value={title}
       />
       </View>
-      <View>
-        <Text>Body</Text>
+      <View stlye={styles.titleContainer}>
+        <Text style={styles.title}>Body</Text>
        <TextInput
           style={styles.mainInput}
           onChangeText={setBody}
@@ -55,8 +48,7 @@ const NewTaskTodo = ({ navigation }) => {
         />
       </View>
       <View>
-        <CheckBox
-          center
+          <CheckBox
           title="Urgent"
           checked={isChecked}
           onPress={() => setIsChecked(!isChecked)}
@@ -66,7 +58,8 @@ const NewTaskTodo = ({ navigation }) => {
       <View>
          <Button
           title="New Task"
-           buttonStyle={{
+          buttonStyle={{
+             marginTop: 70,
              height: 90,
              backgroundColor: '#9FB6B1',
              borderRadius: 3,
@@ -87,7 +80,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: '100%',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    justifyContent: 'center'
   },
    mainInput: {
     borderWidth: 1,

@@ -3,24 +3,25 @@ import {useDispatch, useSelector} from 'react-redux';
 import { FlatList, Text, View, StyleSheet, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native';
-import {deleteTodo} from '../redux/actionCreators'
+import {DeleteTodo} from '../redux/actionCreators'
 
 const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const data = useSelector(state => state)
-  const [list, setList] = useState(data)
+  const list = useSelector(state => state)
+  const [currentTodos, setCurrentTodos] = useState('')
   
- const handleDeleteTodo = (item) => {
-   const todoIndex = list.todoListReducer.indexOf(item);
-   console.log(todoIndex)
-    if (todoIndex > -1) {
-      dispatch(deleteTodo);
+  useEffect(() => {
+    setCurrentTodos(list)
+  }, [])
+  
+  const handleDeleteTodo = (item) => {
+    if (item) {
+      dispatch(DeleteTodo(item.id));
+      setCurrentTodos(list)
     } else {
-      return
+      return;
     }
   };
-  
-  // console.log('data', list)
   
   return (
     <View style={styles.container}>
@@ -33,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
       </View>
       <FlatList
         style={{ width: '100%', height: '100%', marginVertical: 20,}}
-        data={list.todoListReducer}
+        data={list.todos.todos}
         renderItem={({ item } ) => {
           return(
           <View style={styles.flatList}>
@@ -43,12 +44,12 @@ const HomeScreen = ({ navigation }) => {
                </View>
                 ) : (
                <View style={styles.taskUrgent}>
-                  <Text style={{fontSize: 22, color: 'white',}}>TASK {item0.id}</Text>
+                  <Text style={{fontSize: 22, color: 'white',}}>TASK {item.id}</Text>
                </View>
               )}
             <View>
               <Text style= {styles.taskTitle}>{item.title}</Text>
-             <View>
+                <View style={styles.taskTodoContainer}>
               <Text style={styles.taskTodo}>{item.body}</Text>
             </View>
               </View>
@@ -100,11 +101,11 @@ const styles = StyleSheet.create({
   flatList: {
     flex: 1,
     flexDirection: 'row',
-    marginHorizontal:'5%',
-    minHeight: '33%',
+    marginHorizontal: '5%',
     borderColor: 'black',
     borderWidth: 2,
     borderRadius: 10,
+    marginBottom: 30
   },
   taskUrgent: {
     borderWidth: 2,
@@ -132,11 +133,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold'
   },
+  taskTodoContainer: {
+    width: '80%',
+  },
   taskTodo: {
     marginTop: 5,
     fontSize: 8,
     flexWrap: 'wrap',
-    width: '20%'
+    
   },
   deleteButton: {
     position: 'absolute',

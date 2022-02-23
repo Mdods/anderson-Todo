@@ -1,14 +1,18 @@
-import types from './actionTypes';
+import {ADD_TODO, DELETE_TODO} from './actionTypes';
 
-const actionCreators = {
-    AddTodo: (title) => {
-        let listId = Math.round(Math.random() * 100);
-        return { type: types.ADD_TODO, payload: { listId, title } };
-    },
-    DeleteTodo: (listId) => {
-        return { type: types.DELETE_TODO, payload: { listId } };
-    },
-    
-};
+export const  DeleteTodo = (id) => ({
+    type: DELETE_TODO,
+    payload: {
+        id
+    }
+})
 
-export default actionCreators;
+export const AddTodo = ( id, title, body, urgent) => ({
+    type: ADD_TODO,
+    payload: {
+        id: id,
+        title: title,
+        body: body,
+        urgent: urgent,
+    }
+});
