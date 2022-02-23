@@ -47,7 +47,7 @@ const NewTaskTodo = ({ navigation }) => {
           
         />
       </View>
-      <View>
+      <View style={styles.checkBoxContainer}>
           <CheckBox
           title="Urgent"
           checked={isChecked}
@@ -101,6 +101,9 @@ const styles = StyleSheet.create({
     marginHorizontal: '5%',
     fontSize: 22,
     fontWeight: '300'
+  },
+  checkBoxContainer: {
+    marginTop: 30,
   },
 })
 
