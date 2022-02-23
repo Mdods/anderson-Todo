@@ -4,7 +4,6 @@ import thunk from 'redux-thunk'
 import {Provider} from 'react-redux';
 import AppContainer from './container/AppContainer';
 import rootReducer from './redux/reducer'
-import NewTaskTodo from './screens/NewTodoScreen';
 
 const middleware = applyMiddleware(thunk)
 const store = createStore(rootReducer, middleware);
